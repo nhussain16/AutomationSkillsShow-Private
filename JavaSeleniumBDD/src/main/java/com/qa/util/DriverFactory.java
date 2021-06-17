@@ -38,10 +38,8 @@ public class DriverFactory {
 			System.out.println("Please pass the correct browser value: " + browser);
 		}
 
-		getDriver().manage().window().maximize();
 		getDriver().manage().deleteAllCookies();
 		getDriver().manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-		getDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		return getDriver();
 
 	}
