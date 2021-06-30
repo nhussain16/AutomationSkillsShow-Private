@@ -9,14 +9,16 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SignupPage {
 	private WebDriver driver;
-	private WebElement el;
+	private static WebElement el;
 	private Logger log = Logger.getLogger(SignupPage.class);
 	private static String emailDomain = "@abc.com";
 	private static String rand;
-	private static int timeout = 40;
+	private static int timeout = 20;
 
 	// 1. By Locators:
 	private By userName = By.id("name");
@@ -33,30 +35,22 @@ public class SignupPage {
 	private By signupSlack = By.xpath("//div[@class='signup__btn signup__social__btn signup__btn--slack']//child::div[@class='signup__btn-icon']");
 	private By signupApple = By.xpath("//div[@class='signup__btn-icon']//child::img[@alt='Sign up with Apple']");
 	private By signupFacebook = By.xpath("//div[@class='signup__btn-icon']//child::img[@alt='Sign up with Facebook']");
-	private By continueToSignUp = By.xpath("//div[text()='Continue to sign up']");
+	private By continueToSignUp = By.cssSelector(".socialtos__btn.js__socialtos-signup");
 	private By blankFormError = By
 			.xpath("//div[@class='signup__error-wrap-login js-empty-password signup__error signup__error-item']");
-	private By signupTermsError = By
-			.xpath("//div[@class='signup__error-item' and text()='Please agree with the Terms to sign up.']");
-	private By passwordError = By
-			.xpath("//div[@class='signup__error-wrap-login js-empty-password signup__error signup__error-item']");
-	private By emailError = By.xpath(
-			"//div[@class='signup__error-item' and text()='This doesn’t look like an email address. Please check it for typos and try again.']");
-	private By nameError = By.xpath("//div[@class='signup__error-item' and text()='Please enter your name.']");
-	private By showSoSoPasswordhint = By.xpath(
-			"//div[@class='signup__input-hint-text signup__input-hint-text--color-soso' and text()='So-so password']");
-	private By showMediumPasswordhint = By.xpath(
-			"//div[@class='signup__input-hint-text signup__input-hint-text--color-good' and text()='Good password']");
-	private By showHighPasswordhint = By.xpath(
-			"//div[@class='signup__input-hint-text signup__input-hint-text--color-great' and text()='Great password']");
-	private By showLengthPasswordHint = By
-			.xpath("//div[@class='signup__input-hint-text' and text()='Please use 8+ characters for secure password']");
+	private By signupTermsError = By.cssSelector(".signup__error-item,js-signup-error-signup.error.emptyterms");
+	private By passwordError = By.cssSelector(".signup__error-item.js-empty-password");
+	private By emailError = By.cssSelector(".signup__error-item,js-signup-error-emailformat");
+	private By nameError = By.cssSelector(".signup__error-item,js-signup-error-signup.error.emptyname");
+	private By showHintError = By.cssSelector(".signup__input-hint-text");
+	private By showLengthPasswordHint = By.xpath("//div[text()='Please use 8+ characters for secure password']");
 
+	
 	public SignupPage(WebDriver driver) {
 		this.driver = driver;
 	}
 
-	// 3. page actions: features(behavior) of the page the form of methods:
+	// 2. page actions: features(behavior) of the page the form of methods:
 	public void acceptAllCookies() {
 		try {
 			if (driver.findElement(acceptAllCookies).isDisplayed()) 
@@ -65,9 +59,9 @@ public class SignupPage {
 			
 			log.info("Access miro signup page");
 			log.info("Accept all cookies button from browser popup");
-		} catch (NoSuchElementException e) {
-			log.error("All cookies popup screen not appeared", e.fillInStackTrace());
-		}
+			} catch (NoSuchElementException e) {
+				log.error("All cookies popup screen not appeared", e.fillInStackTrace());
+			}
 	}
 
 	public String getPageTitle() {
@@ -152,26 +146,30 @@ public class SignupPage {
 		try {
 			switch (tool) {
 			case "Google":
+				driver.findElement(signupGoogle);
+				ClickOn(driver, signupGoogle, timeout);
+				break;
 				
-				waitForElementByLocatorAndClick(signupGoogle);
-				el.click();
-				break;
 			case "Slack":
-				waitForElementByLocatorAndClick(signupSlack);
-				el.click();
+				driver.findElement(signupSlack);
+				ClickOn(driver, signupSlack, timeout);
 				break;
-			case "Office365":
-				waitForElementByLocatorAndClick(signupOffice365);
-				el.click();
+				
+			case "Office365":				
+				driver.findElement(signupOffice365);
+				ClickOn(driver, signupOffice365, timeout);
 				break;
+				
 			case "Apple":
-				waitForElementByLocatorAndClick(signupApple);
-				el.click();
+				driver.findElement(signupApple);
+				ClickOn(driver, signupApple, timeout);
 				break;
+				
 			case "Facebook":
-				waitForElementByLocatorAndClick(signupFacebook);
-				el.click();
+				driver.findElement(signupFacebook);
+				ClickOn(driver, signupFacebook, timeout);
 				break;
+				
 			default:
 				System.out.println("Sign up with tool : " + tool + " is invalid");
 			}
@@ -181,13 +179,14 @@ public class SignupPage {
 	}
 
 	public void agreeSignupTermsWithThirdParty() {
-		waitForElementByLocatorAndClick(thirdPartySignupTerms);
+		driver.findElement(thirdPartySignupTerms);
+		ClickOnPopUp(driver, thirdPartySignupTerms, timeout);
 		log.info("Clicked on signup terms with third party account");
 	}
 
 	public void continueToSignupWithThirdParty() {
-		waitForPageLoad(timeout);
-		waitForElementByLocatorAndClick(continueToSignUp);
+		driver.findElement(continueToSignUp);
+		ClickOnPopUp(driver, continueToSignUp, timeout);
 		log.info("Clicked on continue to signup button with third party account");
 	}
 
@@ -332,7 +331,7 @@ public class SignupPage {
 	public String showLowPasswordStrengthHint() {
 		try {
 			System.out.println("Getting hint on password strength");
-			return driver.findElement(showSoSoPasswordhint).getText();
+			return driver.findElement(showHintError).getText();
 		} catch (NoSuchElementException e) {
 			log.error("Low password strength not appeared on screen", e.fillInStackTrace());
 			return "Something went wrong...";
@@ -342,7 +341,7 @@ public class SignupPage {
 	public String showMediumPasswordStrengthHint() {
 		try {
 			System.out.println("Getting hint on password strength");
-			return driver.findElement(showMediumPasswordhint).getText();
+			return driver.findElement(showHintError).getText();
 		} catch (NoSuchElementException e) {
 			log.error("Medium password strength not appeared on screen", e.fillInStackTrace());
 			return "Something went wrong...";
@@ -352,7 +351,7 @@ public class SignupPage {
 	public String showHighPasswordStrengthHint() {
 		try {
 			System.out.println("Getting hint on password strength");
-			return driver.findElement(showHighPasswordhint).getText();
+			return driver.findElement(showHintError).getText();
 		} catch (NoSuchElementException e) {
 			log.error("High password strength not appeared on screen", e.fillInStackTrace());
 			return "Something went wrong...";
@@ -363,31 +362,28 @@ public class SignupPage {
 		try {
 			System.out.println("Getting hint on password length");
 			return driver.findElement(showLengthPasswordHint).getText();
+			
 		} catch (NoSuchElementException e) {
 			log.error("Password length validation not appeared on screen", e.fillInStackTrace());
 			return "Something went wrong...";
 		}
 	}
 	
-	public void scrollDownPageToEnd() {
-		// Press End button
-		driver.manage().timeouts().pageLoadTimeout(timeout, TimeUnit.SECONDS);
-		Actions builder = new Actions(driver);
-		builder.sendKeys(Keys.END).build().perform();
+	public static void ClickOn(WebDriver driver, By locator, int timeout) {
+		driver.navigate().refresh();
+		new WebDriverWait(driver, timeout).
+			until(ExpectedConditions.elementToBeClickable(locator)).click();
 	}
 
-	public void waitForElementByLocatorAndClick(By elementLocator) {
-		driver.manage().timeouts().pageLoadTimeout(timeout, TimeUnit.SECONDS);
-		el = driver.findElement(elementLocator);
-		Actions act = new Actions(driver);
-		act.moveToElement(el).click().build().perform();
+	public void ClickOnPopUp(WebDriver driver, By locator, int timeout) {
+		new WebDriverWait(driver, timeout).
+			until(ExpectedConditions.elementToBeClickable(locator)).click();
 	}
-
-	public void waitForPageLoad(int seconds) {
-		// Initialize and wait till element(link) became clickable - timeout in seconds
-		driver.manage().timeouts().pageLoadTimeout(seconds, TimeUnit.SECONDS);
-	}
-
+	
+	public void waitForPageLoad(int seconds) { 
+	  driver.manage().timeouts().pageLoadTimeout(seconds, TimeUnit.SECONDS); 
+	  }
+	 
 	public String randomNumberGenerator() {
 		try {
 			String[] alphanumeric = "01234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");

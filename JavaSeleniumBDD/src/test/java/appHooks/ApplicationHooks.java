@@ -33,8 +33,6 @@ public class ApplicationHooks {
 		String browserName = prop.getProperty("browser");
 		driverFactory = new DriverFactory();
 		driver = driverFactory.init_driver(browserName);
-		// Maximizing browser window
-		driver.manage().window().maximize();
 	}
 
 	@After(order = 0)

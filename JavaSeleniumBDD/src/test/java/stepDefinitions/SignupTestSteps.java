@@ -19,13 +19,11 @@ public class SignupTestSteps {
 	private String goodPwd = "Good password";
 	private String greatPwd = "Great password";
 	private String pwdLengthError = "Please use 8+ characters for secure password";
-	private int timeout = 30;
 
 	@Given("I access miro signup page")
 	public void i_access_miro_signup_page() {
 		// access sign up page
 		DriverFactory.getDriver().get("https://miro.com/signup/");
-		signupPage.acceptAllCookies();
 	}
 
 	@When("I enter valid username,email,password")
@@ -55,7 +53,6 @@ public class SignupTestSteps {
 
 	@When("I click on Sign up with {string} button")
 	public void SignupWithThirdPartyTool(String tool) {
-		signupPage.scrollDownPageToEnd();
 		signupPage.clickOnSignupWith(tool);
 	}
 
@@ -71,32 +68,27 @@ public class SignupTestSteps {
 
 	@Then("Google login screen should display")
 	public void displayGoogleLoginScreen() {
-		signupPage.waitForPageLoad(timeout);
 		Assert.assertEquals("Sign in – Google accounts", signupPage.getPageTitle());
 	}
 
 	@Then("Slack login screen should display")
 	public void displaySlackLoginScreen() {
-		signupPage.waitForPageLoad(timeout);
 		Assert.assertEquals("Sign in | Slack", signupPage.getPageTitle());
 	}
 
 	@Then("Office365 login screen should display")
 	public void displayOffice365LoginScreen() {
-		signupPage.waitForPageLoad(timeout);
 		Assert.assertEquals("Sign in to your account", signupPage.getPageTitle());
 	}
 
 	@Then("Apple login screen should display")
 	public void displayAppleLoginScreen() {
-		signupPage.waitForPageLoad(timeout);
 		Assert.assertEquals("Sign in with Apple ID", signupPage.getPageTitle());
 	}
 
 	@Then("Facebook login screen should display")
 	public void displayFacebookLoginScreen() {
-		signupPage.waitForPageLoad(timeout);
-		Assert.assertEquals("Log in to Facebook | Facebook", signupPage.getPageTitle());
+		Assert.assertEquals("Log masuk ke Facebook | Facebook", signupPage.getPageTitle());
 	}
 
 	// Negative scenarios started

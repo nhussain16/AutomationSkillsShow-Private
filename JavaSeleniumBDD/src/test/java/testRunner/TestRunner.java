@@ -11,7 +11,7 @@ import io.cucumber.junit.CucumberOptions;
 		plugin = {"pretty",
 				"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
 		},
-		//tags = "@Positive_Test1",
+		tags = "not @Negative_Test1",
 		monochrome = true
 		)
 public class TestRunner {

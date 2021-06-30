@@ -2,7 +2,7 @@
 	In order to collaborate to global teams
 	As a Teamplayer
 	I want to be able to register to miro
-
+    
   @Positive_Test
   Scenario: Register to miro successfully with mandatory fields
     Given I access miro signup page
@@ -97,7 +97,7 @@
   	When I enter password strength from medium to high
     Then password hint should indicate "Great password"      
 
-  @Negative_Test
+	@Negative_Test1
 	Scenario: Show hint for incorrect password length
 		Given I access miro signup page
   	When I enter incorrect password length
